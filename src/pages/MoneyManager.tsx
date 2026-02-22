@@ -168,8 +168,8 @@ export default function MoneyManager() {
 
       {/* Add Expense Modal */}
       {showAddExpense && (
-        <div className="fixed inset-0 z-50 bg-background/80 backdrop-blur-sm flex items-end justify-center">
-          <div className="glass-card w-full max-w-lg p-6 rounded-t-2xl space-y-4 slide-up">
+        <div className="fixed inset-0 z-50 bg-background/80 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="glass-card w-full max-w-lg p-6 rounded-2xl space-y-4 slide-up">
             <div className="flex justify-between items-center">
               <h2 className="text-lg font-bold">Add Expense</h2>
               <button onClick={() => setShowAddExpense(false)} className="text-muted-foreground">✕</button>
