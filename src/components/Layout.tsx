@@ -1,11 +1,12 @@
 import { NavLink, useLocation } from 'react-router-dom';
-import { LayoutDashboard, CheckSquare, Wallet, BarChart3 } from 'lucide-react';
+import { LayoutDashboard, CheckSquare, Wallet, BarChart3, Clock } from 'lucide-react';
 
 const navItems = [
   { to: '/', icon: LayoutDashboard, label: 'Home' },
   { to: '/habits', icon: CheckSquare, label: 'Habits' },
   { to: '/money', icon: Wallet, label: 'Money' },
-  { to: '/analytics', icon: BarChart3, label: 'Analytics' },
+  { to: '/analytics', icon: BarChart3, label: 'Stats' },
+  { to: '/history', icon: Clock, label: 'History' },
 ];
 
 export default function Layout({ children }: { children: React.ReactNode }) {
