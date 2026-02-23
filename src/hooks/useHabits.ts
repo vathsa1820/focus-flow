@@ -21,6 +21,15 @@ const DEFAULT_HABITS = [
   'Sleep on time',
 ];
 
+function loadCustomHabits(): string[] {
+  const stored = localStorage.getItem('custom-habits');
+  return stored ? JSON.parse(stored) : [];
+}
+
+function saveCustomHabits(habits: string[]) {
+  localStorage.setItem('custom-habits', JSON.stringify(habits));
+}
+
 function getMonday(d: Date): Date {
   const date = new Date(d);
   const day = date.getDay();
@@ -87,7 +96,32 @@ export function useHabits() {
 
   const isCurrentWeek = weekKey === formatWeekKey(getMonday(new Date()));
 
-  const habitNames = DEFAULT_HABITS;
+  const [customHabits, setCustomHabits] = useState<string[]>(loadCustomHabits);
+
+  const habitNames = [...DEFAULT_HABITS, ...customHabits];
+
+  const addHabit = useCallback((name: string) => {
+    const trimmed = name.trim();
+    if (!trimmed || habitNames.includes(trimmed)) return;
+    const updated = [...customHabits, trimmed];
+    setCustomHabits(updated);
+    saveCustomHabits(updated);
+    setWeekData(prev => ({ ...prev, [trimmed]: Array(7).fill(false) }));
+  }, [customHabits, habitNames]);
+
+  const removeHabit = useCallback((name: string) => {
+    if (DEFAULT_HABITS.includes(name)) return; // can't remove defaults
+    const updated = customHabits.filter(h => h !== name);
+    setCustomHabits(updated);
+    saveCustomHabits(updated);
+    setWeekData(prev => {
+      const next = { ...prev };
+      delete next[name];
+      return next;
+    });
+  }, [customHabits]);
+
+  const isCustomHabit = useCallback((name: string) => !DEFAULT_HABITS.includes(name), []);
 
   const getHabitTotal = (habit: string) => (weekData[habit] || []).filter(Boolean).length;
   const getHabitPercent = (habit: string) => Math.round((getHabitTotal(habit) / 7) * 100);
@@ -129,5 +163,6 @@ export function useHabits() {
     toggleHabit, goToPreviousWeek, goToNextWeek, goToCurrentWeek,
     isCurrentWeek, getHabitTotal, getHabitPercent, getOverallPercent,
     getBestHabit, getMostMissed, getWeekLabel,
+    addHabit, removeHabit, isCustomHabit,
   };
 }
