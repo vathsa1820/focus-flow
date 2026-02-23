@@ -23,7 +23,9 @@ const App = () => {
       <TooltipProvider>
         <Toaster />
         <Sonner />
-        {showSplash && <SplashScreen onComplete={() => setShowSplash(false)} />}
+        {showSplash ? (
+          <SplashScreen onComplete={() => setShowSplash(false)} />
+        ) : (
         <BrowserRouter>
           <Layout>
             <Routes>
@@ -36,6 +38,7 @@ const App = () => {
             </Routes>
           </Layout>
         </BrowserRouter>
+        )}
       </TooltipProvider>
     </QueryClientProvider>
   );
