@@ -1,6 +1,7 @@
+import { useState } from 'react';
 import { useHabits } from '@/hooks/useHabits';
 import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer, PieChart, Pie, Cell, Tooltip } from 'recharts';
-import { ChevronLeft, ChevronRight, RotateCcw, Check } from 'lucide-react';
+import { ChevronLeft, ChevronRight, RotateCcw, Check, Plus, X } from 'lucide-react';
 
 const DAYS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
 const CHART_COLORS = ['hsl(82, 85%, 55%)', 'hsl(240, 4%, 16%)'];
@@ -19,7 +20,8 @@ function getBgColor(pct: number) {
 
 export default function HabitTracker() {
   const h = useHabits();
-
+  const [newHabit, setNewHabit] = useState('');
+  const [showAdd, setShowAdd] = useState(false);
   const barData = h.habitNames.map(name => ({
     name: name.length > 12 ? name.slice(0, 12) + '…' : name,
     days: h.getHabitTotal(name),
@@ -59,6 +61,37 @@ export default function HabitTracker() {
       </div>
       <p className="text-sm text-muted-foreground -mt-3">{h.getWeekLabel()}</p>
 
+      {/* Add Custom Habit */}
+      {showAdd && (
+        <div className="glass-card p-3 flex gap-2 slide-up">
+          <input
+            value={newHabit}
+            onChange={e => setNewHabit(e.target.value)}
+            onKeyDown={e => {
+              if (e.key === 'Enter' && newHabit.trim()) {
+                h.addHabit(newHabit);
+                setNewHabit('');
+                setShowAdd(false);
+              }
+            }}
+            placeholder="New habit name…"
+            className="flex-1 bg-secondary/50 rounded-lg px-3 py-2 text-sm outline-none focus:ring-1 focus:ring-primary"
+          />
+          <button
+            onClick={() => {
+              if (newHabit.trim()) {
+                h.addHabit(newHabit);
+                setNewHabit('');
+                setShowAdd(false);
+              }
+            }}
+            className="px-3 py-2 bg-primary text-primary-foreground rounded-lg text-sm font-medium"
+          >
+            Add
+          </button>
+        </div>
+      )}
+
       {/* Excel Table */}
       <div className="glass-card overflow-x-auto slide-up">
         <table className="w-full text-xs">
@@ -85,7 +118,18 @@ export default function HabitTracker() {
                   style={{ animationDelay: `${i * 0.02}s` }}
                 >
                   <td className="p-3 sticky left-0 bg-card/95 backdrop-blur-sm font-medium text-foreground text-[11px]">
-                    {habit}
+                    <span className="flex items-center gap-1">
+                      {habit}
+                      {h.isCustomHabit(habit) && (
+                        <button
+                          onClick={() => h.removeHabit(habit)}
+                          className="text-muted-foreground hover:text-destructive transition-colors ml-auto"
+                          title="Remove habit"
+                        >
+                          <X size={12} />
+                        </button>
+                      )}
+                    </span>
                   </td>
                   {DAYS.map((_, di) => (
                     <td key={di} className="p-1 text-center">
