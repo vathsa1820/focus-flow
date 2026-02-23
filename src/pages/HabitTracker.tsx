@@ -40,6 +40,9 @@ export default function HabitTracker() {
       <div className="flex items-center justify-between">
         <h1 className="text-xl font-bold">Habit Tracker</h1>
         <div className="flex items-center gap-1">
+          <button onClick={() => setShowAdd(v => !v)} className="p-2 rounded-lg hover:bg-secondary transition-colors">
+            <Plus size={18} className="text-primary" />
+          </button>
           <button onClick={h.goToPreviousWeek} className="p-2 rounded-lg hover:bg-secondary transition-colors">
             <ChevronLeft size={18} className="text-muted-foreground" />
           </button>
