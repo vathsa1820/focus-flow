@@ -97,12 +97,20 @@ export default function MoneyManager() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <h1 className="text-xl font-bold">Money Manager</h1>
-        <button
-          onClick={() => setShowSetIncome(true)}
-          className="text-xs text-muted-foreground hover:text-foreground transition-colors"
-        >
-          ₹{m.income.toLocaleString('en-IN')}/mo
-        </button>
+        <div className="flex items-center gap-2">
+          <button
+            onClick={() => setShowSetIncome(true)}
+            className="text-xs text-muted-foreground hover:text-foreground transition-colors"
+          >
+            ₹{m.income.toLocaleString('en-IN')}/mo
+          </button>
+          <button
+            onClick={() => { m.resetIncome(); setShowSetIncome(true); }}
+            className="text-xs text-destructive/70 hover:text-destructive transition-colors"
+          >
+            Reset
+          </button>
+        </div>
       </div>
 
       {/* Overview Card */}
