@@ -1,5 +1,5 @@
 import { NavLink, useLocation } from 'react-router-dom';
-import { LayoutDashboard, CheckSquare, Wallet, BarChart3, Clock } from 'lucide-react';
+import { LayoutDashboard, CheckSquare, Wallet, BarChart3, Clock, Zap } from 'lucide-react';
 
 const navItems = [
   { to: '/', icon: LayoutDashboard, label: 'Home' },
@@ -14,7 +14,17 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 
   return (
     <div className="min-h-screen bg-background pb-20">
-      <main className="container max-w-lg mx-auto px-4 pt-6">
+      {/* App Header */}
+      <header className="sticky top-0 z-40 bg-card/80 backdrop-blur-xl border-b border-border">
+        <div className="container max-w-lg mx-auto px-4 py-3 flex items-center gap-2.5">
+          <div className="w-8 h-8 rounded-lg bg-primary/15 flex items-center justify-center">
+            <Zap size={18} className="text-primary" />
+          </div>
+          <span className="text-lg font-bold tracking-tight">Focus Flow</span>
+        </div>
+      </header>
+
+      <main className="container max-w-lg mx-auto px-4 pt-4">
         {children}
       </main>
 
