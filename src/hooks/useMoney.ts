@@ -67,6 +67,11 @@ export function useMoney() {
     setCategories(prev => prev.map(c => c.name === 'Savings' ? { ...c, budget: savings } : c));
   };
 
+  const resetIncome = () => {
+    setIncomeState(0);
+    setCategories(DEFAULT_CATEGORIES);
+  };
+
   const updateBudget = (categoryName: string, newBudget: number) => {
     setCategories(prev => prev.map(c => c.name === categoryName ? { ...c, budget: newBudget } : c));
   };
@@ -125,7 +130,7 @@ export function useMoney() {
   };
 
   return {
-    income, setIncome, categories, updateBudget,
+    income, setIncome, resetIncome, categories, updateBudget,
     expenses, addExpense, deleteExpense,
     getCategorySpent, getCategoryRemaining, getCategoryPercent,
     totalBudget, totalSpent, totalRemaining,
