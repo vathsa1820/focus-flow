@@ -1,5 +1,5 @@
 import { NavLink, useLocation } from 'react-router-dom';
-import { LayoutDashboard, CheckSquare, Wallet, BarChart3, Clock, Zap } from 'lucide-react';
+import { LayoutDashboard, CheckSquare, Wallet, BarChart3, Clock, Zap, Settings } from 'lucide-react';
 
 const navItems = [
   { to: '/', icon: LayoutDashboard, label: 'Home' },
@@ -16,11 +16,16 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     <div className="min-h-screen bg-background pb-20">
       {/* App Header */}
       <header className="sticky top-0 z-40 bg-card/80 backdrop-blur-xl border-b border-border">
-        <div className="container max-w-lg mx-auto px-4 py-3 flex items-center gap-2.5">
-          <div className="w-8 h-8 rounded-lg bg-primary/15 flex items-center justify-center">
-            <Zap size={18} className="text-primary" />
+        <div className="container max-w-lg mx-auto px-4 py-3 flex items-center justify-between">
+          <div className="flex items-center gap-2.5">
+            <div className="w-8 h-8 rounded-lg bg-primary/15 flex items-center justify-center">
+              <Zap size={18} className="text-primary" />
+            </div>
+            <span className="text-lg font-bold tracking-tight">Focus Flow</span>
           </div>
-          <span className="text-lg font-bold tracking-tight">Focus Flow</span>
+          <NavLink to="/settings" className="p-2 rounded-lg hover:bg-secondary transition-colors">
+            <Settings size={18} className={location.pathname === '/settings' ? 'text-primary' : 'text-muted-foreground'} />
+          </NavLink>
         </div>
       </header>
 
