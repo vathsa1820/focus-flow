@@ -10,6 +10,7 @@ import Index from "./pages/Index";
 import HabitTracker from "./pages/HabitTracker";
 import MoneyManager from "./pages/MoneyManager";
 import Analytics from "./pages/Analytics";
+import Settings from "./pages/Settings";
 import NotFound from "./pages/NotFound";
 import SplashScreen from "./components/SplashScreen";
 
@@ -34,6 +35,7 @@ const App = () => {
               <Route path="/money" element={<MoneyManager />} />
               <Route path="/analytics" element={<Analytics />} />
               <Route path="/history" element={<History />} />
+              <Route path="/settings" element={<Settings />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </Layout>
