@@ -1,7 +1,7 @@
 import { useHabits } from '@/hooks/useHabits';
 import { useMoney } from '@/hooks/useMoney';
 import { PieChart, Pie, Cell, ResponsiveContainer } from 'recharts';
-import { TrendingUp, Target, Wallet, Flame } from 'lucide-react';
+import { TrendingUp, Target, Wallet, Flame, CalendarCheck, PiggyBank } from 'lucide-react';
 
 export default function Dashboard() {
   const habits = useHabits();
@@ -19,6 +19,19 @@ export default function Dashboard() {
     .filter(c => c.spent > 0)
     .sort((a, b) => b.spent - a.spent)
     .slice(0, 3);
+
+  // Weekly summary: top 5 habits by completion
+  const habitStreaks = habits.habitNames
+    .map(name => ({ name, total: habits.getHabitTotal(name) }))
+    .sort((a, b) => b.total - a.total)
+    .slice(0, 5);
+
+  // Savings progress
+  const savingsCat = money.categories.find(c => c.name === 'Savings');
+  const savingsBudget = savingsCat?.budget ?? 0;
+  const savingsSpent = money.getCategorySpent('Savings');
+  const savedAmount = savingsBudget - savingsSpent; // what's left unspent from savings budget
+  const savingsPct = money.income > 0 ? Math.round((savedAmount / money.income) * 100) : 0;
 
   return (
     <div className="space-y-5 fade-in">
@@ -116,6 +129,70 @@ export default function Dashboard() {
         ) : (
           <p className="text-sm text-muted-foreground">Set your monthly income to get started →</p>
         )}
+      </div>
+
+      {/* Weekly Summary */}
+      <div className="glass-card p-5 slide-up" style={{ animationDelay: '0.22s' }}>
+        <div className="flex items-center gap-2 mb-4">
+          <CalendarCheck size={18} className="text-primary" />
+          <h2 className="text-sm font-semibold">Weekly Summary</h2>
+          <span className="ml-auto text-xs text-muted-foreground">{habits.getWeekLabel()}</span>
+        </div>
+
+        {/* Habit streaks */}
+        <p className="text-xs text-muted-foreground uppercase tracking-wider mb-2">Top Habits</p>
+        <div className="space-y-2 mb-4">
+          {habitStreaks.map(({ name, total }) => (
+            <div key={name} className="flex items-center gap-2">
+              <span className="text-xs text-foreground truncate w-36">{name}</span>
+              <div className="flex-1 progress-bar">
+                <div
+                  className="progress-bar-fill bg-primary"
+                  style={{ width: `${Math.round((total / 7) * 100)}%` }}
+                />
+              </div>
+              <span className="text-xs text-muted-foreground w-8 text-right">{total}/7</span>
+              <div className="flex gap-0.5">
+                {Array.from({ length: 7 }).map((_, i) => {
+                  const done = (habits.weekData[name] || [])[i];
+                  return (
+                    <div
+                      key={i}
+                      className={`w-2.5 h-2.5 rounded-sm ${done ? 'bg-primary' : 'bg-muted'}`}
+                    />
+                  );
+                })}
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Savings progress */}
+        <div className="border-t border-border pt-4">
+          <div className="flex items-center gap-2 mb-2">
+            <PiggyBank size={14} className="text-primary" />
+            <p className="text-xs text-muted-foreground uppercase tracking-wider">Savings Progress</p>
+          </div>
+          {money.income > 0 ? (
+            <>
+              <div className="flex justify-between items-baseline mb-1.5">
+                <span className="text-sm font-semibold">₹{Math.max(0, savedAmount).toLocaleString('en-IN')}</span>
+                <span className="text-xs text-muted-foreground">{savingsPct}% of income</span>
+              </div>
+              <div className="progress-bar">
+                <div
+                  className="progress-bar-fill bg-primary"
+                  style={{ width: `${Math.min(100, Math.max(0, savingsPct))}%` }}
+                />
+              </div>
+              <p className="text-xs text-muted-foreground mt-1.5">
+                Target: ₹{savingsBudget.toLocaleString('en-IN')} · Remaining budget: ₹{money.totalRemaining.toLocaleString('en-IN')}
+              </p>
+            </>
+          ) : (
+            <p className="text-xs text-muted-foreground">Set your income in Money Manager to track savings →</p>
+          )}
+        </div>
       </div>
 
       {/* Insight */}
