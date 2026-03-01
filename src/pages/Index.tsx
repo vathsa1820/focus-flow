@@ -6,6 +6,7 @@ import { TrendingUp, Target, Wallet, Flame } from 'lucide-react';
 export default function Dashboard() {
   const habits = useHabits();
   const money = useMoney();
+  const userName = localStorage.getItem('focus-flow-user-name');
 
   const overallPct = habits.getOverallPercent();
   const donutData = [
@@ -24,7 +25,7 @@ export default function Dashboard() {
       {/* Header */}
       <div>
         <h1 className="text-2xl font-bold">
-          Good {new Date().getHours() < 12 ? 'morning' : new Date().getHours() < 17 ? 'afternoon' : 'evening'} 👋
+          Good {new Date().getHours() < 12 ? 'morning' : new Date().getHours() < 17 ? 'afternoon' : 'evening'}{userName ? `, ${userName}` : ''} 👋
         </h1>
         <p className="text-muted-foreground text-sm mt-1">Here's your life snapshot</p>
       </div>
