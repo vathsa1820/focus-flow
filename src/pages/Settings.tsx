@@ -1,10 +1,13 @@
 import { useState } from 'react';
-import { User, Trash2, RotateCcw } from 'lucide-react';
+import { User, Trash2, RotateCcw, Sun, Moon } from 'lucide-react';
 import { toast } from 'sonner';
+import { useTheme } from 'next-themes';
 
 export default function Settings() {
   const [name, setName] = useState(() => localStorage.getItem('focus-flow-user-name') || '');
   const [nameInput, setNameInput] = useState(name);
+  const { theme, setTheme } = useTheme();
+  const isDark = theme === 'dark';
 
   const handleSaveName = () => {
     const trimmed = nameInput.trim();
@@ -75,6 +78,39 @@ export default function Settings() {
             className="px-4 py-2.5 border border-border rounded-lg text-muted-foreground hover:text-foreground transition-colors disabled:opacity-40"
           >
             <RotateCcw size={16} />
+          </button>
+        </div>
+      </div>
+
+      {/* Theme */}
+      <div className="glass-card p-5 space-y-4 slide-up" style={{ animationDelay: '0.05s' }}>
+        <div className="flex items-center gap-2 mb-1">
+          {isDark ? <Moon size={16} className="text-primary" /> : <Sun size={16} className="text-primary" />}
+          <h2 className="text-sm font-semibold">Appearance</h2>
+        </div>
+        <p className="text-xs text-muted-foreground">Choose your preferred theme.</p>
+        <div className="flex gap-3">
+          <button
+            onClick={() => setTheme('dark')}
+            className={`flex-1 flex items-center justify-center gap-2 py-3 rounded-lg border transition-colors ${
+              isDark
+                ? 'border-primary bg-primary/10 text-primary'
+                : 'border-border text-muted-foreground hover:bg-secondary/50'
+            }`}
+          >
+            <Moon size={16} />
+            <span className="text-sm font-medium">Dark</span>
+          </button>
+          <button
+            onClick={() => setTheme('light')}
+            className={`flex-1 flex items-center justify-center gap-2 py-3 rounded-lg border transition-colors ${
+              !isDark
+                ? 'border-primary bg-primary/10 text-primary'
+                : 'border-border text-muted-foreground hover:bg-secondary/50'
+            }`}
+          >
+            <Sun size={16} />
+            <span className="text-sm font-medium">Light</span>
           </button>
         </div>
       </div>
