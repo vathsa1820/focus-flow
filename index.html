@@ -2,29 +2,35 @@
 <html lang="en" class="dark">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <!-- TODO: Set the document title to the name of your application -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <title>Focus Flow</title>
-    <meta name="description" content="For Students">
+    <meta name="description" content="Your personal habit tracker and money manager for students" />
     <meta name="author" content="Lovable" />
 
-    <!-- TODO: Update og:title to match your application name -->
-    
-    
-    <meta property="og:type" content="website" />
-    <meta property="og:image" content="https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/b0e37379-1109-403d-9fac-33e81456eb83/id-preview-f77c6dad--50cd6e51-c388-4607-b68b-119a90fe6335.lovable.app-1772008535370.png">
+    <!-- PWA -->
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <meta name="theme-color" content="#0a0a0f" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="Focus Flow" />
+    <link rel="apple-touch-icon" href="/icon-192.png" />
+    <link rel="icon" href="/icon-192.png" type="image/png" />
 
+    <!-- OG / Twitter -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Focus Flow" />
+    <meta property="og:description" content="Your personal habit tracker and money manager" />
+    <meta property="og:image" content="https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/b0e37379-1109-403d-9fac-33e81456eb83/id-preview-f77c6dad--50cd6e51-c388-4607-b68b-119a90fe6335.lovable.app-1772008535370.png" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:site" content="@Lovable" />
-    <meta name="twitter:image" content="https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/b0e37379-1109-403d-9fac-33e81456eb83/id-preview-f77c6dad--50cd6e51-c388-4607-b68b-119a90fe6335.lovable.app-1772008535370.png">
-    <meta property="og:title" content="Focus Flow">
-  <meta name="twitter:title" content="Focus Flow">
-  <meta property="og:description" content="For Students">
-  <meta name="twitter:description" content="For Students">
-</head>
-
+    <meta name="twitter:title" content="Focus Flow" />
+    <meta name="twitter:description" content="Your personal habit tracker and money manager" />
+    <meta name="twitter:image" content="https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/b0e37379-1109-403d-9fac-33e81456eb83/id-preview-f77c6dad--50cd6e51-c388-4607-b68b-119a90fe6335.lovable.app-1772008535370.png" />
+  </head>
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
+

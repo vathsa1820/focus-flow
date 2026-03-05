@@ -1,5 +1,6 @@
 import { NavLink, useLocation } from 'react-router-dom';
-import { LayoutDashboard, CheckSquare, Wallet, BarChart3, Clock, Zap, Settings } from 'lucide-react';
+import { LayoutDashboard, CheckSquare, Wallet, BarChart3, Clock, Zap, Settings, Download, X } from 'lucide-react';
+import { usePWAInstall } from '@/hooks/usePWAInstall';
 
 const navItems = [
   { to: '/', icon: LayoutDashboard, label: 'Home' },
@@ -11,9 +12,26 @@ const navItems = [
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   const location = useLocation();
+  const { install, dismiss, showBanner } = usePWAInstall();
 
   return (
     <div className="min-h-screen bg-background pb-20">
+      {/* PWA Install Banner */}
+      {showBanner && (
+        <div className="sticky top-0 z-50 bg-primary text-primary-foreground px-4 py-2.5 flex items-center gap-3">
+          <Download size={16} className="shrink-0" />
+          <p className="text-xs font-medium flex-1">Install Focus Flow for offline access & home screen shortcut</p>
+          <button
+            onClick={install}
+            className="text-xs font-bold bg-primary-foreground/20 hover:bg-primary-foreground/30 transition-colors px-3 py-1 rounded-full shrink-0"
+          >
+            Install
+          </button>
+          <button onClick={dismiss} className="shrink-0 opacity-70 hover:opacity-100 transition-opacity">
+            <X size={14} />
+          </button>
+        </div>
+      )}
       {/* App Header */}
       <header className="sticky top-0 z-40 bg-card/80 backdrop-blur-xl border-b border-border">
         <div className="container max-w-lg mx-auto px-4 py-3 flex items-center justify-between">
