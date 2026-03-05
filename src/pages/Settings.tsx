@@ -1,13 +1,36 @@
 import { useState } from 'react';
-import { User, Trash2, RotateCcw, Sun, Moon } from 'lucide-react';
+import { User, Trash2, RotateCcw, Sun, Moon, Bell, BellOff } from 'lucide-react';
 import { toast } from 'sonner';
 import { useTheme } from 'next-themes';
+import { useNotificationReminder } from '@/hooks/useNotificationReminder';
 
 export default function Settings() {
   const [name, setName] = useState(() => localStorage.getItem('focus-flow-user-name') || '');
   const [nameInput, setNameInput] = useState(name);
   const { theme, setTheme } = useTheme();
   const isDark = theme === 'dark';
+  const { reminderTime, setReminderTime, clearReminder, permission, requestPermission } = useNotificationReminder();
+  const [timeInput, setTimeInput] = useState(reminderTime);
+
+  const handleSaveReminder = async () => {
+    if (!timeInput) return;
+    let granted = permission === 'granted';
+    if (!granted) {
+      granted = await requestPermission();
+      if (!granted) {
+        toast.error('Notifications blocked. Please allow them in browser settings.');
+        return;
+      }
+    }
+    setReminderTime(timeInput);
+    toast.success(`Reminder set for ${timeInput} daily!`);
+  };
+
+  const handleClearReminder = () => {
+    clearReminder();
+    setTimeInput('');
+    toast.success('Reminder cleared.');
+  };
 
   const handleSaveName = () => {
     const trimmed = nameInput.trim();
@@ -112,6 +135,50 @@ export default function Settings() {
             <Sun size={16} />
             <span className="text-sm font-medium">Light</span>
           </button>
+        </div>
+      </div>
+
+      {/* Habit Reminders */}
+      <div className="glass-card p-5 space-y-4 slide-up" style={{ animationDelay: '0.1s' }}>
+        <div className="flex items-center gap-2 mb-1">
+          <Bell size={16} className="text-primary" />
+          <h2 className="text-sm font-semibold">Daily Habit Reminder</h2>
+          {reminderTime && (
+            <span className="ml-auto text-xs bg-primary/10 text-primary px-2 py-0.5 rounded-full">
+              {reminderTime} daily
+            </span>
+          )}
+        </div>
+        <p className="text-xs text-muted-foreground">
+          Get a browser notification to check your habits. Works while this tab is open.
+        </p>
+        {permission === 'denied' && (
+          <p className="text-xs text-destructive bg-destructive/10 px-3 py-2 rounded-lg">
+            Notifications are blocked in your browser. Enable them in site settings to use reminders.
+          </p>
+        )}
+        <div className="flex gap-2 items-center">
+          <input
+            type="time"
+            value={timeInput}
+            onChange={e => setTimeInput(e.target.value)}
+            className="flex-1 bg-secondary border border-border rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/50 text-sm"
+          />
+          <button
+            onClick={handleSaveReminder}
+            disabled={!timeInput || timeInput === reminderTime}
+            className="px-4 py-3 bg-primary text-primary-foreground font-semibold rounded-lg hover:opacity-90 transition-opacity disabled:opacity-40 text-sm"
+          >
+            Set
+          </button>
+          {reminderTime && (
+            <button
+              onClick={handleClearReminder}
+              className="px-3 py-3 border border-border rounded-lg text-muted-foreground hover:text-foreground transition-colors"
+            >
+              <BellOff size={16} />
+            </button>
+          )}
         </div>
       </div>
 
