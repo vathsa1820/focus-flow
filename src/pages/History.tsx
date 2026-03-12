@@ -62,18 +62,18 @@ export default function History() {
 
   // Money data
   const income: number = useMemo(() => {
-    const s = localStorage.getItem(`money-income-${monthKey}`);
-    return s ? JSON.parse(s) : 0;
+    const raw = safeParse<unknown>(localStorage.getItem(`money-income-${monthKey}`), 0);
+    return typeof raw === 'number' ? raw : 0;
   }, [monthKey]);
 
   const categories = useMemo(() => {
-    const s = localStorage.getItem(`money-categories-${monthKey}`);
-    return s ? JSON.parse(s) as { name: string; emoji: string; budget: number }[] : [];
+    const raw = safeParse<unknown>(localStorage.getItem(`money-categories-${monthKey}`), []);
+    return Array.isArray(raw) ? raw as { name: string; emoji: string; budget: number }[] : [];
   }, [monthKey]);
 
   const expenses = useMemo(() => {
-    const s = localStorage.getItem(`money-expenses-${monthKey}`);
-    return s ? JSON.parse(s) as { amount: number; category: string; date: string; note?: string }[] : [];
+    const raw = safeParse<unknown>(localStorage.getItem(`money-expenses-${monthKey}`), []);
+    return Array.isArray(raw) ? raw as { amount: number; category: string; date: string; note?: string }[] : [];
   }, [monthKey]);
 
   const totalSpent = expenses.reduce((s, e) => s + e.amount, 0);
