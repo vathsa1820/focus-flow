@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
+import { safeParse } from '@/lib/safeParse';
 
 export interface Expense {
   id: string;
@@ -33,18 +34,18 @@ export function useMoney() {
   const monthKey = getMonthKey();
 
   const [income, setIncomeState] = useState<number>(() => {
-    const stored = localStorage.getItem(`money-income-${monthKey}`);
-    return stored ? JSON.parse(stored) : 0;
+    const raw = safeParse<unknown>(localStorage.getItem(`money-income-${monthKey}`), 0);
+    return typeof raw === 'number' ? raw : 0;
   });
 
   const [categories, setCategories] = useState<BudgetCategory[]>(() => {
-    const stored = localStorage.getItem(`money-categories-${monthKey}`);
-    return stored ? JSON.parse(stored) : DEFAULT_CATEGORIES;
+    const raw = safeParse<unknown>(localStorage.getItem(`money-categories-${monthKey}`), DEFAULT_CATEGORIES);
+    return Array.isArray(raw) ? (raw as BudgetCategory[]) : DEFAULT_CATEGORIES;
   });
 
   const [expenses, setExpenses] = useState<Expense[]>(() => {
-    const stored = localStorage.getItem(`money-expenses-${monthKey}`);
-    return stored ? JSON.parse(stored) : [];
+    const raw = safeParse<unknown>(localStorage.getItem(`money-expenses-${monthKey}`), []);
+    return Array.isArray(raw) ? (raw as Expense[]) : [];
   });
 
   useEffect(() => {
