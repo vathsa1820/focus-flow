@@ -1,5 +1,6 @@
 import { useState, useMemo } from 'react';
 import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer, Tooltip, PieChart, Pie, Cell } from 'recharts';
+import { safeParse } from '@/lib/safeParse';
 import { ChevronLeft, ChevronRight, Calendar } from 'lucide-react';
 
 const COLORS = [

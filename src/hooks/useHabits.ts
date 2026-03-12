@@ -49,22 +49,24 @@ export function useHabits() {
   const [currentWeekStart, setCurrentWeekStart] = useState(() => getMonday(new Date()));
   const weekKey = formatWeekKey(currentWeekStart);
 
-  const [weekData, setWeekData] = useState<Record<string, boolean[]>>(() => {
-    const stored = localStorage.getItem(`habits-${weekKey}`);
-    if (stored) return JSON.parse(stored);
+  const buildInitialWeek = (): Record<string, boolean[]> => {
     const initial: Record<string, boolean[]> = {};
     DEFAULT_HABITS.forEach(h => { initial[h] = Array(7).fill(false); });
     return initial;
+  };
+
+  const [weekData, setWeekData] = useState<Record<string, boolean[]>>(() => {
+    const raw = safeParse<unknown>(localStorage.getItem(`habits-${weekKey}`), null);
+    if (raw && typeof raw === 'object' && !Array.isArray(raw)) return raw as Record<string, boolean[]>;
+    return buildInitialWeek();
   });
 
   useEffect(() => {
-    const stored = localStorage.getItem(`habits-${weekKey}`);
-    if (stored) {
-      setWeekData(JSON.parse(stored));
+    const raw = safeParse<unknown>(localStorage.getItem(`habits-${weekKey}`), null);
+    if (raw && typeof raw === 'object' && !Array.isArray(raw)) {
+      setWeekData(raw as Record<string, boolean[]>);
     } else {
-      const initial: Record<string, boolean[]> = {};
-      DEFAULT_HABITS.forEach(h => { initial[h] = Array(7).fill(false); });
-      setWeekData(initial);
+      setWeekData(buildInitialWeek());
     }
   }, [weekKey]);
 
