@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
+import { safeParse } from '@/lib/safeParse';
 
 export interface HabitWeek {
   weekStart: string; // ISO date string of Monday
@@ -23,7 +24,8 @@ const DEFAULT_HABITS = [
 
 function loadCustomHabits(): string[] {
   const stored = localStorage.getItem('custom-habits');
-  return stored ? JSON.parse(stored) : [];
+  const parsed = safeParse<unknown>(stored, []);
+  return Array.isArray(parsed) ? (parsed as string[]).filter(h => typeof h === 'string') : [];
 }
 
 function saveCustomHabits(habits: string[]) {
