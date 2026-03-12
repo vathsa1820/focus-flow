@@ -92,8 +92,10 @@ export default function History() {
 
   const habitWeeks = useMemo(() => {
     return weekKeys.map(wk => {
-      const s = localStorage.getItem(`habits-${wk}`);
-      const data: Record<string, boolean[]> = s ? JSON.parse(s) : {};
+      const raw = safeParse<unknown>(localStorage.getItem(`habits-${wk}`), {});
+      const data: Record<string, boolean[]> = (raw && typeof raw === 'object' && !Array.isArray(raw))
+        ? raw as Record<string, boolean[]>
+        : {};
       const habits = Object.keys(data);
       const totalPossible = habits.length * 7;
       const totalDone = habits.reduce((sum, h) => sum + (data[h] || []).filter(Boolean).length, 0);
